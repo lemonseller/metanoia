@@ -372,10 +372,10 @@ INSERT INTO questions(question_id, question) VALUES
 
 
 
--- Insert into response
-INSERT INTO response(question_id, response, date, id) VALUES (1, 
-'SQL is a standard language for managing data held in a relational database.', 
-CURDATE(), 1), 
-(2,'NoSQL databases are non-tabular, and store data differently than relational tables.', 
-CURDATE(), 2);
+-- -- Insert into response
+-- INSERT INTO response(question_id, response, date, id) VALUES (1, 
+-- 'SQL is a standard language for managing data held in a relational database.', 
+-- CURDATE(), 1), 
+-- (2,'NoSQL databases are non-tabular, and store data differently than relational tables.', 
+-- CURDATE(), 2);
 
