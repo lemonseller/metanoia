@@ -53,7 +53,7 @@ pool.query(`
 });
 
 app.get('/', (req, res) => {
-  res.redirect('/home/home.html');
+  res.redirect('public/home/home.html');
 });
 
 // Create a new user
