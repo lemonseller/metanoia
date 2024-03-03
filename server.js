@@ -22,7 +22,7 @@ pool.query(`
 });
 
 pool.query(`
-  CREATE DATABASE IF NOT EXISTS questions(
+  CREATE TABLE IF NOT EXISTS questions(
     question_id INT AUTO_INCREMENT PRIMARY KEY,
     question VARCHAR(500) NOT NULL,
   ) 
@@ -35,7 +35,7 @@ pool.query(`
 });
 
 pool.query(`
-  CREATE DATABASE IF NOT EXISTS response(
+  CREATE TABLE IF NOT EXISTS response(
     id INT NOT NULL,
     question_id INT NOT NULL,
     response VARCHAR(500) NOT NULL,
