@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="loggedin.css">
+</head>
+<body>
+  <h1 id="welcomeMessage"></h1>
+
+  <script>
+    // Get the email from localStorage
+    const email = localStorage.getItem('email');
+
+    // Display the welcome message
+    document.getElementById('welcomeMessage').textContent = 'Welcome, ' + email;
+  </script>
+</body>
+</html>
