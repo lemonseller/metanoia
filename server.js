@@ -56,6 +56,7 @@ app.get('/', (req, res) => {
   res.redirect('/home.html');
 });
 
+
 // Create a new user
 app.post('/users', (req, res) => {
   const { email } = req.body;
