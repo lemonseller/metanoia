@@ -450,19 +450,19 @@ app.post('/users', (req, res) => {
 
 //get all questions
 app.get('/questions', (req, res) => {
-  pool.query('SELECT * FROM questions', (err, result) => {
+  db.query('SELECT * FROM questions;', (err, results) => {
     if (err) {
       console.error(err);
-      res.status(500).json({ error: err });
+      res.status(500).send('Error fetching questions');
     } else {
-      res.json(result.rows);
+      res.json(results);
     }
   });
 });
 
 // Get all users
 app.get('/users', (req, res) => {
-  pool.query('SELECT * FROM users', (err, result) => {
+  pool.query('SELECT * FROM users;', (err, result) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: err });

@@ -1,5 +1,19 @@
 import { gapi } from 'gapi'; // Add the missing import statement for the gapi object
 
+window.onload = function() {
+  fetch('/questions')
+    .then(response => response.json())
+    .then(questions => {
+      const questionsContainer = document.getElementById('questions');
+      questions.forEach(question => {
+        const p = document.createElement('p');
+        p.textContent = question.question;
+        questionsContainer.appendChild(p);
+      });
+    })
+    .catch(error => console.error('Error:', error));
+};
+
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
