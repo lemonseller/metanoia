@@ -1,30 +1,34 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 const app = express();
-const port = 3000;
 
-app.use(express.static('public'));
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
-let db = new sqlite3.Database(':memory:', (err) => {
+pool.query(`
+CREATE DATABASE IF NOT EXISTS users(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(100) NOT NULL UNIQUE
+)
+`, (err) => {
   if (err) {
-    return console.error(err.message);
+    console.error(err);
   }
-  console.log('Connected to the in-memory SQlite database.');
 });
 
-app.get('/', (req, res) => {
-    res.redirect('/home/home.html');
-  });
-
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
-
-process.on('exit', () => {
-  db.close((err) => {
+app.get('/data', (req, res) => {
+  pool.query('SELECT * FROM users', (err, result) => {
     if (err) {
-      return console.error(err.message);
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.json(result.rows);
     }
-    console.log('Closed the database connection.');
   });
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
