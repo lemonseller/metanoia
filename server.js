@@ -8,6 +8,50 @@ const pool = new Pool({
   connectionString: 'postgres://metanoiadb_user:kuAX1CFMOD3cYviClznlCmBaeSRKSTEj@dpg-cni61ci1hbls73ffusj0-a/metanoiadb',
 });
 
+pool.query(`
+  CREATE TABLE IF NOT EXISTS users(
+    id SERIAL PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE
+  )
+`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log("Users table is ready");
+  }
+});
+
+pool.query(`
+  CREATE DATABASE IF NOT EXISTS questions(
+    question_id INT AUTO_INCREMENT PRIMARY KEY,
+    question VARCHAR(500) NOT NULL,
+  ) 
+`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log("Users table is ready");
+  }
+});
+
+pool.query(`
+  CREATE DATABASE IF NOT EXISTS response(
+    id INT NOT NULL,
+    question_id INT NOT NULL,
+    response VARCHAR(500) NOT NULL,
+    date DATE NOT NULL,
+    PRIMARY KEY (question_id, id, date),
+    FOREIGN KEY (question_id) REFERENCES questions(question_id),
+    FOREIGN KEY (id) REFERENCES users(id)
+  )
+`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log("Users table is ready");
+  }
+});
+
 // Create a new user
 app.post('/users', (req, res) => {
   const { email } = req.body;
