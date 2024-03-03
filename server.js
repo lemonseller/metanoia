@@ -2,7 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const app = express();
 
-app.use(express.json()); // for parsing application/json
+app.use(express.static('public/home'));
 
 const pool = new Pool({
   connectionString: 'postgres://metanoiadb_user:kuAX1CFMOD3cYviClznlCmBaeSRKSTEj@dpg-cni61ci1hbls73ffusj0-a/metanoiadb',
@@ -22,20 +22,20 @@ pool.query(`
 });
 
 pool.query(`
-  CREATE DATABASE IF NOT EXISTS questions(
-    question_id INT AUTO_INCREMENT PRIMARY KEY,
-    question VARCHAR(500) NOT NULL,
+  CREATE TABLE IF NOT EXISTS questions(
+    question_id SERIAL PRIMARY KEY,
+    question VARCHAR(500) NOT NULL
   ) 
 `, (err) => {
   if (err) {
     console.error(err);
   } else {
-    console.log("Users table is ready");
+    console.log("questions table is ready");
   }
 });
 
 pool.query(`
-  CREATE DATABASE IF NOT EXISTS response(
+  CREATE TABLE IF NOT EXISTS response(
     id INT NOT NULL,
     question_id INT NOT NULL,
     response VARCHAR(500) NOT NULL,
@@ -48,9 +48,14 @@ pool.query(`
   if (err) {
     console.error(err);
   } else {
-    console.log("Users table is ready");
+    console.log("response table is ready");
   }
 });
+
+app.get('/', (req, res) => {
+  res.redirect('/home.html');
+});
+
 
 // Create a new user
 app.post('/users', (req, res) => {
