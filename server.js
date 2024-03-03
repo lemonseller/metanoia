@@ -2,7 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const app = express();
 
-app.use(express.json()); // for parsing application/json
+app.use(express.static('public/home'));
 
 const pool = new Pool({
   connectionString: 'postgres://metanoiadb_user:kuAX1CFMOD3cYviClznlCmBaeSRKSTEj@dpg-cni61ci1hbls73ffusj0-a/metanoiadb',
@@ -53,7 +53,7 @@ pool.query(`
 });
 
 app.get('/', (req, res) => {
-  res.redirect('public/home/home.html');
+  res.redirect('/home.html');
 });
 
 // Create a new user
