@@ -23,8 +23,8 @@ pool.query(`
 
 pool.query(`
   CREATE TABLE IF NOT EXISTS questions(
-    question_id INT AUTO_INCREMENT PRIMARY KEY,
-    question VARCHAR(500) NOT NULL,
+    question_id SERIAL PRIMARY KEY,
+    question VARCHAR(500) NOT NULL
   ) 
 `, (err) => {
   if (err) {
