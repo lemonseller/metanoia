@@ -2,28 +2,60 @@ const express = require('express');
 const { Pool } = require('pg');
 const app = express();
 
+app.use(express.json()); // for parsing application/json
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: 'postgres://metanoiadb_user:kuAX1CFMOD3cYviClznlCmBaeSRKSTEj@dpg-cni61ci1hbls73ffusj0-a/metanoiadb',
 });
 
-pool.query(`
-CREATE DATABASE IF NOT EXISTS users(
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  email VARCHAR(100) NOT NULL UNIQUE
-)
-`, (err) => {
-  if (err) {
-    console.error(err);
-  }
+// Create a new user
+app.post('/users', (req, res) => {
+  const { email } = req.body;
+  pool.query('INSERT INTO users (email) VALUES ($1) RETURNING *', [email], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.status(201).json(result.rows[0]);
+    }
+  });
 });
 
-app.get('/data', (req, res) => {
+// Get all users
+app.get('/users', (req, res) => {
   pool.query('SELECT * FROM users', (err, result) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: err });
     } else {
       res.json(result.rows);
+    }
+  });
+});
+
+// Update a user
+app.put('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const { email } = req.body;
+  pool.query('UPDATE users SET email = $1 WHERE id = $2 RETURNING *', [email, id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.json(result.rows[0]);
+    }
+  });
+});
+
+// Delete a user
+app.delete('/users/:id', (req, res) => {
+  const { id } = req.params;
+  pool.query('DELETE FROM users WHERE id = $1', [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.status(204).end();
     }
   });
 });
