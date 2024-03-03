@@ -30,7 +30,7 @@ pool.query(`
   if (err) {
     console.error(err);
   } else {
-    console.log("Users table is ready");
+    console.log("questions table is ready");
   }
 });
 
@@ -48,8 +48,12 @@ pool.query(`
   if (err) {
     console.error(err);
   } else {
-    console.log("Users table is ready");
+    console.log("response table is ready");
   }
+});
+
+app.get('/', (req, res) => {
+  res.redirect('/home/home.html');
 });
 
 // Create a new user
