@@ -5,7 +5,7 @@ const app = express();
 app.use(express.static('public/home'));
 
 const pool = new Pool({
-  connectionString: 'postgres://metanoiadb_user:kuAX1CFMOD3cYviClznlCmBaeSRKSTEj@dpg-cni61ci1hbls73ffusj0-a/metanoiadb',
+  connectionString: 'postgres://metanoia_user:vixgfYScDTPCg25cm3QKpdyC1rObyDHU@dpg-cnibco8l6cac7397fd0g-a/metanoia',
 });
 
 pool.query(`
