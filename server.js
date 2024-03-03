@@ -1,30 +1,110 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 const app = express();
-const port = 3000;
 
-app.use(express.static('public'));
+app.use(express.json()); // for parsing application/json
 
-let db = new sqlite3.Database(':memory:', (err) => {
+const pool = new Pool({
+  connectionString: 'postgres://metanoiadb_user:kuAX1CFMOD3cYviClznlCmBaeSRKSTEj@dpg-cni61ci1hbls73ffusj0-a/metanoiadb',
+});
+
+pool.query(`
+  CREATE TABLE IF NOT EXISTS users(
+    id SERIAL PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE
+  )
+`, (err) => {
   if (err) {
-    return console.error(err.message);
+    console.error(err);
+  } else {
+    console.log("Users table is ready");
   }
-  console.log('Connected to the in-memory SQlite database.');
 });
 
-app.get('/', (req, res) => {
-    res.redirect('/home/home.html');
-  });
-
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+pool.query(`
+  CREATE DATABASE IF NOT EXISTS questions(
+    question_id INT AUTO_INCREMENT PRIMARY KEY,
+    question VARCHAR(500) NOT NULL,
+  ) 
+`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log("Users table is ready");
+  }
 });
 
-process.on('exit', () => {
-  db.close((err) => {
+pool.query(`
+  CREATE DATABASE IF NOT EXISTS response(
+    id INT NOT NULL,
+    question_id INT NOT NULL,
+    response VARCHAR(500) NOT NULL,
+    date DATE NOT NULL,
+    PRIMARY KEY (question_id, id, date),
+    FOREIGN KEY (question_id) REFERENCES questions(question_id),
+    FOREIGN KEY (id) REFERENCES users(id)
+  )
+`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log("Users table is ready");
+  }
+});
+
+// Create a new user
+app.post('/users', (req, res) => {
+  const { email } = req.body;
+  pool.query('INSERT INTO users (email) VALUES ($1) RETURNING *', [email], (err, result) => {
     if (err) {
-      return console.error(err.message);
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.status(201).json(result.rows[0]);
     }
-    console.log('Closed the database connection.');
   });
+});
+
+// Get all users
+app.get('/users', (req, res) => {
+  pool.query('SELECT * FROM users', (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.json(result.rows);
+    }
+  });
+});
+
+// Update a user
+app.put('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const { email } = req.body;
+  pool.query('UPDATE users SET email = $1 WHERE id = $2 RETURNING *', [email, id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.json(result.rows[0]);
+    }
+  });
+});
+
+// Delete a user
+app.delete('/users/:id', (req, res) => {
+  const { id } = req.params;
+  pool.query('DELETE FROM users WHERE id = $1', [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.status(204).end();
+    }
+  });
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
