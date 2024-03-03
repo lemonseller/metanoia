@@ -14,3 +14,8 @@ h1 {
     font-size: 3rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
+#google-oauth {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+}

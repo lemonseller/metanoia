@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Hello, World!</title>
+        <title>Metanoia</title>
+        <!-- <link rel="icon" href="../../Metanoia logo.png" type=”image/png” sizes="width=16px,height=16px"> -->
         <link rel="stylesheet" type="text/css" href="home.css">
+        <meta name="google-signin-client_id" content="293351650047-pe3eoqf5m1qfslm0v0ddau2n0hopsaim.apps.googleusercontent.com">
     </head>
     <body>
-        <h1>Hello, World!</h1>
-        <script src="home.js"></script>
+        <h1>Metanoia</h1>
+        
+        <!-- Google OAuth Section -->
+    <section id="google-oauth">
+        <!-- <h2>Sign in with Google</h2> -->
+        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    </section>
+  <!-- Include Google API library -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="home.js"></script>
     </body>
 </html>
