@@ -19,9 +19,11 @@ function signOut() {
 
 }
 gapi.load('auth2', function() {
-    gapi.auth2.init();
+  gapi.auth2.init({
+    client_id: '293351650047-pe3eoqf5m1qfslm0v0ddau2n0hopsaim.apps.googleusercontent.com'
+    // Add other configuration options as needed.
   });
-
+});
   document.getElementById('googleSignIn').onclick = function() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signIn().then(function(googleUser) {
